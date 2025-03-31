@@ -33,8 +33,6 @@ public class CartController {
     private final CartService cartService;
     private final CartMapper cartMapper = Mappers.getMapper(CartMapper.class);
     private final ProductFeignClient productFeignClient;
-    @Value("${build.version}")
-    private String buildVersion;
 
     private final Environment environment;
 
@@ -63,14 +61,6 @@ public class CartController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(enrichedProducts, HttpStatus.OK);
-    }
-
-    @Retry(name = "getBuildInfo",fallbackMethod = "getBuildInfoFallback")
-    @GetMapping("/build-info")
-    public ResponseEntity<String> getBuildInfo() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(buildVersion);
     }
 
     public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
